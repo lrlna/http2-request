@@ -1,0 +1,22 @@
+{
+  "name": "http2-request",
+  "version": "1.0.0",
+  "description": "tiny package to work with http2 requests",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard"
+  },
+  "keywords": [
+    "http2",
+    "request"
+  ],
+  "author": "Irina Shestak",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "standard": "^11.0.1",
+    "tls-keygen": "^3.4.0"
+  },
+  "dependencies": {
+    "pump": "^3.0.0"
+  }
+}

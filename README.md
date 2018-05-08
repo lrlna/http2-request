@@ -4,24 +4,22 @@
 
 # Usage
 ```js
-var request = require('http2-request')
+var request = require('../')
+var fs = require('fs')
 
-var headers = {
-}
-
-var opts = { 
-  endStream: true,
-  exclusive: true,
-  parent: 1,
-  weight: 1,
-  getTrailers: () => {}
-}
-
-var req = request(headers, opts, function (err, res, body) {
-  if (err) throw err
-  if (res && body) {
-    console.log(bod)
+var opts = {
+  url: 'https://localhost:8001',
+  ca: fs.readFileSync('/path/to/cert./pem'),
+  body: 'bod bod bod bod',
+  headers: {
+    ':path': '/'
   }
+}
+
+request(opts, function (err, headers, body) {
+  if (err) throw err
+  if (!headers.isOk()) throw new Error(`statusCode is ${headers.statusCode}`)
+  console.log(body)
 })
 ```
 
@@ -33,12 +31,6 @@ npm install http2-request
 ```
 
 # Related content
-- [pino](https://github.com/pinojs/pino)
-- [merry](https://github.com/shipharbor/merry)
-- [garnish](https://github.com/mattdesl/garnish)
-- [@studio/log](https://github.com/javascript-studio/studio-log)
-- [pino-http](https://github.com/pinojs/pino-http)
-- [hapi-pino](https://github.com/pinojs/hapi-pino)
 
 ## License
 [Apache-2.0](https://tldrlegal.com/license/mit-license)

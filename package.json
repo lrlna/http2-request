@@ -1,6 +1,6 @@
 {
   "name": "http2-request",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "smol package to work with http2 requests",
   "main": "index.js",
   "scripts": {

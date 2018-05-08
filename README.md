@@ -2,7 +2,7 @@
 [![npm version][1]][2] [![build status][3]][4]
 [![downloads][5]][6] [![js-standard-style][7]][8]
 
-Super smol HTTP/2 request :package:.
+Super smol HTTP/2 request library :package:. Optimized for JSON APIs. 
 
 ## Usage
 ```js
@@ -14,7 +14,6 @@ var opts = {
   connectOpts: {
     ca: fs.readFileSync('~/http2-request/cert.pem')
   },
-  json: true,
   clientOpts: {},
   headers: {
     ':path': '/'

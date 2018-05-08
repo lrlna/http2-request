@@ -31,7 +31,11 @@ var os = require('os')
 			':status': 200,
 			'message': 'hiya'
 		})
-		stream.end('fin')
+    var endObject = {
+      price: 25,
+      category: 'socks'
+    }
+		stream.end(JSON.stringify(endObject))
 	})
 
 	server.listen(8001)

@@ -17,6 +17,9 @@
     "tls-keygen": "^3.4.0"
   },
   "dependencies": {
+    "concat-stream": "^1.6.2",
+    "fast-json-parse": "^1.0.3",
+    "fast-safe-stringify": "^2.0.4",
     "pump": "^3.0.0"
   }
 }

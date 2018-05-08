@@ -1,39 +1,61 @@
+var parse = require('fast-json-parse')
+var concat = require('concat-stream')
 var assert = require('assert')
 var http2 = require('http2')
 var pump = require('pump')
 
 module.exports = function request (opts, cb) {
   assert.equal(typeof opts, 'object', 'http2-request: opts should be type object')
-  assert.ok(opts.ca, 'http2-request: opts.ca should be provided')
-  assert.equal(typeof opts.ca, 'object', 'http2-request: opts.ca should be type string')
   assert.ok(opts.url, 'http2-request: opts.url should be provided')
 
-  var clientSession = http2.connect(opts.url, { rejectUnauthorized: false })
+  if (!opts.connectOpts) opts.connectOpts = {}
 
-  clientSession.on('error', (err) => return cb(err))
+  var clientSession = http2.connect(opts.url, opts.connectOpts)
 
-  var reqOpts = Object.assign({ ':method': opts.method || 'GET' }, opts.headers)
+  clientSession.on('error', function (err) {
+    return cb(err)
+  })
 
-  var req = clientSession.request(reqOpts)
+  var reqHeaders = Object.assign({ ':method': opts.method || 'GET' }, opts.headers)
+
+  if (!opts.clientOpts) opts.clientOpts = {}
+  if (!opts.json) opts.json = true 
+
+  var req = clientSession.request(reqHeaders, opts.clientOpts)
 
   req.on('response', function (headers) {
     headers.statusCode = headers[':status']
     headers.isOk = function () {
       return headers[':status'] < 299 
     }
-    cb(null, headers, data)
-  })
 
-  var data = ''
-  req.on('data', function (chunk) {
-    data += chunk
-  })
-
-  req.on('end', function () {
-    clientSession.destroy()
+    flush(null, headers)
   })
 
   req.on('error', function (err) {
-    return cb(err)
+    flush(err)
   })
+
+  function flush (err, headers) {
+    if (err) return cb(err) 
+
+    if (!opts.body || typeof opts.body === 'string') {
+      req.end(opts.body)
+    } else if (opts.body.pipe) {
+      pump(opts.body, req)
+    } 
+
+    pump(req, concat(end))
+
+    function end (buf) {
+      clientSession.destroy()
+      if (opts.json) {
+        var body = parse(buf.toString('utf8'))
+        if (body.err) cb(body.err)
+        return cb(null, headers, body.value)
+      }
+
+      cb(null, headers, buf.toString('utf8'))
+    }
+  } 
 }

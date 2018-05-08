@@ -38,7 +38,8 @@ HTTP/2 client and create and HTTP/2 session:
 the request.
 - __opts.json:__  Boolean, defaults to true. Returns either a JSON object or a
   string when false.
-- __opts.url:__ A URL to send a request to.
+- __opts.url:__ A URL to send a request to. `http2-request` will create a `new
+URL` object to get the origin
 - __opts.clientOpts:__ HTTP/2 session [request
   opts](https://nodejs.org/api/http2.html#http2_clienthttp2session_request_headers_options).
 When none are passed, will use defaults. 

@@ -2,7 +2,7 @@
 [![npm version][1]][2] [![build status][3]][4]
 [![downloads][5]][6] [![js-standard-style][7]][8]
 
-Super smol HTTP/2 request library.
+Super smol HTTP/2 request :package:.
 
 ## Usage
 ```js
@@ -75,7 +75,7 @@ npm install http2-request
 [1]: https://img.shields.io/npm/v/http2-request.svg?style=flat-square
 [2]: https://npmjs.org/package/http2-request
 [3]: https://img.shields.io/travis/lrlna/http2-request/master.svg?style=flat-square
-[4]: https://travis-ci.org/lrlna/http2-request
+[4]: https://travis-ci.com/lrlna/http2-request 
 [5]: http://img.shields.io/npm/dm/http2-request.svg?style=flat-square
 [6]: https://npmjs.org/package/http2-request
 [7]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square

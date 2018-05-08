@@ -2,6 +2,7 @@ var parse = require('fast-json-parse')
 var concat = require('concat-stream')
 var assert = require('assert')
 var http2 = require('http2')
+var URL = require('url').URL
 var pump = require('pump')
 
 module.exports = function request (opts, cb) {
@@ -10,23 +11,24 @@ module.exports = function request (opts, cb) {
 
   if (!opts.connectOpts) opts.connectOpts = {}
 
-  var clientSession = http2.connect(opts.url, opts.connectOpts)
+  var url = new URL(opts.url)
+  var clientSession = http2.connect(url.origin, opts.connectOpts)
 
   clientSession.on('error', function (err) {
     return cb(err)
   })
 
-  var reqHeaders = Object.assign({ ':method': opts.method || 'GET' }, opts.headers)
-
   if (!opts.clientOpts) opts.clientOpts = {}
-  if (!opts.json) opts.json = true 
+  if (!opts.json) opts.json = true
+
+  var reqHeaders = Object.assign({ ':method': opts.method || 'GET' }, opts.headers)
 
   var req = clientSession.request(reqHeaders, opts.clientOpts)
 
   req.on('response', function (headers) {
     headers.statusCode = headers[':status']
     headers.isOk = function () {
-      return headers[':status'] < 299 
+      return headers[':status'] < 299
     }
 
     flush(null, headers)
@@ -37,13 +39,13 @@ module.exports = function request (opts, cb) {
   })
 
   function flush (err, headers) {
-    if (err) return cb(err) 
+    if (err) return cb(err)
 
     if (!opts.body || typeof opts.body === 'string') {
       req.end(opts.body)
     } else if (opts.body.pipe) {
       pump(opts.body, req)
-    } 
+    }
 
     pump(req, concat(end))
 
@@ -57,5 +59,5 @@ module.exports = function request (opts, cb) {
 
       cb(null, headers, buf.toString('utf8'))
     }
-  } 
+  }
 }

@@ -6,6 +6,7 @@ var opts = {
   connectOpts: {
     ca: fs.readFileSync('~/http2-request/cert.pem')
   },
+  clientOpts: {},
   headers: {
     ':path': '/'
   }

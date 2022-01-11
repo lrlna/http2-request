@@ -19,7 +19,7 @@ module.exports = function request (opts, cb) {
   })
 
   if (!opts.clientOpts) opts.clientOpts = {}
-  if (!opts.json) opts.json = true
+  opts.json = !!opts.json
 
   var reqHeaders = Object.assign({ ':method': opts.method || 'GET' }, opts.headers)
 
